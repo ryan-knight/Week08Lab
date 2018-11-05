@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/ch12email">
+<Context path="/week8lab">
     <Resource name="jdbc/NotesDB" auth="Container" 
               driverClassName="com.mysql.jdbc.Driver" 
               url="jdbc:mysql://localhost:3306/NotesDB?autoReconnect=true" 

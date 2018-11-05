@@ -7,6 +7,7 @@ package database;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import models.Note;
 
 /**
@@ -19,9 +20,12 @@ public class NoteDB
     public int insert(Note note) throws NotesDBException
     {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try
         {
+            trans.begin();
             em.persist(note);
+            trans.commit();
             return 1;
         }
         finally
@@ -33,9 +37,12 @@ public class NoteDB
     public int update(Note note) throws NotesDBException
     {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try
         {
+            trans.begin();
             em.merge(note);
+            trans.commit();
             return 1;
         }
         finally
@@ -49,7 +56,7 @@ public class NoteDB
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         try
         {
-            List<Note> list = em.createQuery("SELECT a FROM Note a").getResultList();
+            List<Note> list = (List<Note>) em.createQuery("SELECT a FROM Note a").getResultList();
             return list;
         }
         finally
@@ -75,9 +82,12 @@ public class NoteDB
     public int delete(Note note) throws NotesDBException
     {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try
         {
-            em.remove(note);
+            trans.begin();
+            em.remove(em.merge(note));
+            trans.commit();
             return 1;
         }
         finally

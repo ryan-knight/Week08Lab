@@ -4,14 +4,18 @@ import java.sql.SQLException;
 import models.User;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 public class UserDB {
     
     public int insert(User user) throws NotesDBException {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try
         {
+            trans.begin();
             em.persist(user);
+            trans.commit();
             return 1;
         }
         finally
@@ -22,9 +26,13 @@ public class UserDB {
     
     public int update(User user) throws NotesDBException, SQLException {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try
         {
+            trans.begin();
             em.merge(user);
+            trans.commit();
+            em.flush();
             return 1;
         }
         finally
@@ -62,9 +70,12 @@ public class UserDB {
     
     public int delete(User user) throws NotesDBException {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try
         {
-            em.remove(user);
+            trans.begin();
+            em.remove(em.merge(user));
+            trans.commit();
             return 1;
         }
         finally

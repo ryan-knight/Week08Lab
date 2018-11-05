@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import models.Note;
 
 /**
@@ -53,7 +54,7 @@ public class NoteService
     {
         try
         {
-            return noteDB.update(new Note(noteId, null, contents));
+            return noteDB.update(new Note(noteId, noteDB.getNote(noteId).getDateCreated(), contents));
         } catch (NotesDBException ex)
         {
             return 0;
@@ -82,7 +83,7 @@ public class NoteService
         try
         {
             int id = 0;
-            ArrayList<Note> list = (ArrayList<Note>) noteDB.getAll();
+            Vector<Note> list = (Vector<Note>) noteDB.getAll();
             for (Iterator<Note> it = list.iterator(); it.hasNext();)
             {
                 Note currNote = it.next();
