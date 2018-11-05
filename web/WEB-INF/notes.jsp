@@ -22,23 +22,23 @@
                 </tr>
                 <c:forEach items="${notes}" var="note" varStatus="status">
                     <tr>
-                        <td><c:out value="${note.noteId}"></c:out></td>
+                        <td><c:out value="${note.noteid}"></c:out></td>
                         <td><c:out value="${note.dateCreated}"></c:out></td>
                         <td><c:out value="${note.contents}"></c:out></td>
-                        <td><button type="submit" name="action" value="Delete${note.noteId}">Delete</button></td>
-                        <td><button type="submit" name="action" value="Edit${note.noteId}">Edit</button></td>
+                        <td><button type="submit" name="action" value="Delete${note.noteid}">Delete</button></td>
+                        <td><button type="submit" name="action" value="Edit${note.noteid}">Edit</button></td>
                     </tr>
                 </c:forEach>
             </table>
             <c:if test="${empty editnote}"><h2>Add Note</h2></c:if>
-            <c:if test="${not empty editnote}"><h2>Edit Note ${editnote.noteId}</h2></c:if>
+            <c:if test="${not empty editnote}"><h2>Edit Note ${editnote.noteid}</h2></c:if>
             <textarea rows="5" cols="50" name="textarea"><c:if test="${not empty editnote}"><c:out value="${editnote.contents}"></c:out></c:if></textarea>
                 <br>
             <c:if test="${empty editnote}">
                 <button type="submit" name="action" value="Add">Add</button>
             </c:if>
             <c:if test="${not empty editnote}">
-                <button type="submit" name="action" value="Save${editnote.noteId}">Save</button>
+                <button type="submit" name="action" value="Save${editnote.noteid}">Save</button>
             </c:if>
         </form>
     </body>

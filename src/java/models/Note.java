@@ -6,37 +6,70 @@
 package models;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author 763198
  */
+@Entity
+@Table(name = "notes")
+@XmlRootElement
+@NamedQueries(
+{
+    @NamedQuery(name = "Note.findAll", query = "SELECT n FROM Note n")
+    , @NamedQuery(name = "Note.findByNoteid", query = "SELECT n FROM Note n WHERE n.noteid = :noteid")
+    , @NamedQuery(name = "Note.findByDateCreated", query = "SELECT n FROM Note n WHERE n.dateCreated = :dateCreated")
+    , @NamedQuery(name = "Note.findByContents", query = "SELECT n FROM Note n WHERE n.contents = :contents")
+})
 public class Note implements Serializable
 {
-    private int noteId;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "noteid")
+    private Integer noteid;
+    @Column(name = "dateCreated")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
+    @Column(name = "contents")
     private String contents;
 
     public Note()
     {
     }
 
-    public Note(int noteId, Date dateCreated, String contents)
+    public Note(Integer noteid, Date dateCreated, String contents)
     {
-        this.noteId = noteId;
+        this.noteid = noteid;
         this.dateCreated = dateCreated;
         this.contents = contents;
     }
 
-    public int getNoteId()
+    public Note(Integer noteid)
     {
-        return noteId;
+        this.noteid = noteid;
     }
 
-    public void setNoteId(int noteId)
+    public Integer getNoteid()
     {
-        this.noteId = noteId;
+        return noteid;
+    }
+
+    public void setNoteid(Integer noteid)
+    {
+        this.noteid = noteid;
     }
 
     public Date getDateCreated()
@@ -58,6 +91,35 @@ public class Note implements Serializable
     {
         this.contents = contents;
     }
-    
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 0;
+        hash += (noteid != null ? noteid.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Note))
+        {
+            return false;
+        }
+        Note other = (Note) object;
+        if ((this.noteid == null && other.noteid != null) || (this.noteid != null && !this.noteid.equals(other.noteid)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "models.Note[ noteid=" + noteid + " ]";
+    }
     
 }

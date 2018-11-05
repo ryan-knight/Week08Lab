@@ -8,6 +8,8 @@ package services;
 import database.NoteDB;
 import database.NotesDBException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import models.Note;
 
@@ -17,13 +19,14 @@ import models.Note;
  */
 public class NoteService
 {
+
     private NoteDB noteDB;
-    
+
     public NoteService()
     {
         this.noteDB = new NoteDB();
     }
-    
+
     public Note get(int noteId)
     {
         try
@@ -34,7 +37,7 @@ public class NoteService
             return null;
         }
     }
-    
+
     public List<Note> getAll()
     {
         try
@@ -45,7 +48,7 @@ public class NoteService
             return null;
         }
     }
-    
+
     public int update(int noteId, String contents)
     {
         try
@@ -56,7 +59,7 @@ public class NoteService
             return 0;
         }
     }
-    
+
     public int delete(int noteId)
     {
         try
@@ -67,17 +70,30 @@ public class NoteService
             return 0;
         }
     }
-    
+
     public int insert(String contents)
     {
         Note note = new Note();
         note.setContents(contents);
-        
+
         Date date = new Date(System.currentTimeMillis());
         note.setDateCreated(date);
-        
+
         try
         {
+            int id = 0;
+            ArrayList<Note> list = (ArrayList<Note>) noteDB.getAll();
+            for (Iterator<Note> it = list.iterator(); it.hasNext();)
+            {
+                Note currNote = it.next();
+                if (id < currNote.getNoteid())
+                {
+                    id = currNote.getNoteid();
+                }
+            }
+
+            note.setNoteid(id + 1);
+
             return noteDB.insert(note);
         } catch (NotesDBException ex)
         {
